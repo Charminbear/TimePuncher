@@ -1,0 +1,18 @@
+<div ng-controller="TaskEntryCtrl as TaskEntryCtrl">
+	<h1>Timer</h1>
+	<form>
+		<input type="text" placeholder="Name des Tasks" ng-model="TaskEntryCtrl.taskModel.name"/>
+		<tag-selector tags-model="TaskEntryCtrl.taskModel.tags"></tag-selector>
+	</form>
+	<timer autostart="false">{{hhours}}:{{mminutes}}:{{sseconds}}</timer>
+	<button type="button"
+			class="btn btn-primary"
+			ng-click="TaskEntryCtrl.startTimer()"
+			ng-disabled="TaskEntryCtrl.timerRunning">Start
+	</button>
+	<button type="button"
+			class="btn btn-warning"
+			ng-click="TaskEntryCtrl.stopTimer()"
+			ng-disabled="!TaskEntryCtrl.timerRunning">Stop
+	</button>
+</div>

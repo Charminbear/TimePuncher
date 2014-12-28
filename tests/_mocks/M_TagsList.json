@@ -1,0 +1,16 @@
+{
+	"tags" : [
+	  {
+		"id" : 1,
+		"name" : "TestProject2"
+	  },
+	  {
+		"id" : 2,
+		"name" : "Booked"
+	  },
+	  {
+		"id" : 3,
+		"name" : "Timeline"
+	  }
+	]
+}
