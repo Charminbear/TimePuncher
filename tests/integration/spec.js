@@ -10,14 +10,6 @@ var app = require('../../server/server');
 var request = supertest.agent(app.listen());
 
 describe('Application', function () {
-	var waitForDB = function (callback) {
-		app.on('dbReady', callback);
-	};
-	//before(function *(){
-	//	yield waitForApp;
-	//});
-
-
 	describe('GET /', function () {
 		it('should return status 200', function *() {
 			var res = yield request.get('/').expect(200).end();
