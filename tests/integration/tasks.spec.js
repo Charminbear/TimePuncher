@@ -3,7 +3,8 @@
  * Created by David on 28.12.14.
  */
 var supertest = require('co-supertest'),
-	expect = require('chai').expect;
+	expect = require('chai').expect,
+	_ = require('lodash');
 
 var app = require('../../server/server'),
 	db = require('../../server/db');
@@ -19,21 +20,28 @@ describe('Tasks', function () {
 
 	describe('GET /tasks', function () {
 		it('route should exist', function* () {
-			yield request
+			yield request.get('/tasks').expect(200).end();
+		});
+
+		it('should return array', function* () {
+			var response = yield request
 				.get('/tasks')
-				.set('Accept', 'application/json')
 				.expect(200)
 				.end();
+			expect(response).to.have.property('body');
+			expect(response.body).to.be.an('array');
 		});
 
-		it('should return all tasks', function* () {
 
-		});
-	});
-
-	xdescribe('GET /tasks/{taskId}', function () {
-		it('should return correct task', function* () {
-
+		it('should return all Tasks', function* () {
+			var allTasks = yield getDataValuesOfAllTasks;
+			var response = yield request
+				.get('/tasks')
+				.expect(200)
+				.end();
+			expect(response).to.have.property('body');
+			expect(response.body.length).to.equal(allTasks.length);
+			expect(response.body).to.deep.equal(allTasks);
 		});
 	});
 
@@ -44,6 +52,14 @@ describe('Tasks', function () {
 	xdescribe('DEL /tasks', function () {
 
 	});
+
+	xdescribe('GET /tasks/{taskId}', function () {
+		it('should return correct task', function* () {
+
+		});
+	});
+
+
 
 
 	function* prepareDatabase() {
@@ -59,5 +75,13 @@ describe('Tasks', function () {
 		}
 
 		request = supertest.agent(app.listen());
+	}
+
+	function* getDataValuesOfAllTasks() {
+		var allTasks = yield db.models.Task.findAll();
+		// KoA Stringifies the data-values before sending it back. This transforms date-objects into datetime-strings
+		// which we also need to be able to do a deep equals
+		var stringifiedTasks = JSON.stringify(allTasks);
+		return JSON.parse(stringifiedTasks);
 	}
 });
