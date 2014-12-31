@@ -15,24 +15,10 @@ var TASK_LIST_MOCK = require('../_mocks/M_TaskList.json');
 
 
 describe('Tasks', function () {
-	var allTasks;
-	before(function *() {
-		this.timeout(10000);
-		try {
-			yield db.sync({force : true});
-			yield db.models.Task.bulkCreate(TASK_LIST_MOCK);
-
-			allTasks = yield db.models.Task.findAll();
-			expect(allTasks.length).to.equal(TASK_LIST_MOCK.length);
-		} catch (error) {
-			console.error('Error while setting up!', error);
-		}
-
-		request = supertest.agent(app.listen());
-	});
+	before(prepareDatabase);
 
 	describe('GET /tasks', function () {
-		it('should exist', function* () {
+		it('route should exist', function* () {
 			yield request
 				.get('/tasks')
 				.set('Accept', 'application/json')
@@ -45,15 +31,33 @@ describe('Tasks', function () {
 		});
 	});
 
-	describe('GET /tasks/{taskId}', function () {
+	xdescribe('GET /tasks/{taskId}', function () {
+		it('should return correct task', function* () {
+
+		});
+	});
+
+	xdescribe('POST|PUT /tasks', function () {
 
 	});
 
-	describe('POST|PUT /tasks', function () {
+	xdescribe('DEL /tasks', function () {
 
 	});
 
-	describe('DEL /tasks', function () {
 
-	});
+	function* prepareDatabase() {
+		this.timeout(10000);
+		try {
+			yield db.sync({force : true});
+			yield db.models.Task.bulkCreate(TASK_LIST_MOCK);
+
+			var allTasks = yield db.models.Task.findAll();
+			expect(allTasks.length).to.equal(TASK_LIST_MOCK.length);
+		} catch (error) {
+			console.error('Error while setting up Database: ', error);
+		}
+
+		request = supertest.agent(app.listen());
+	}
 });
