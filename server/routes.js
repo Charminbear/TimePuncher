@@ -3,17 +3,20 @@
  * Created by David on 27.12.14.
  */
 
+var APP_ROUTER = require('koa')();
+APP_ROUTER.use(require('koa-trie-router')(APP_ROUTER));
 
-const Router = require('koa-router');
+const taskController = require('./controller/taskController');
 
-const APP_ROUTER = new Router(),
-	taskController = require('./controller/taskController');
+// ROUTES
+APP_ROUTER.get('/', function *() {
+	this.body = 'Hello World!';
+});
 
 APP_ROUTER.route('/tasks')
-	.get()
+	.get(taskController.find)
 	.post()
-	.put()
-	.del();
+	.put();
 
 
 module.exports = APP_ROUTER;
