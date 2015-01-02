@@ -7,9 +7,12 @@ const fs = require('fs'),
 	path = require('path'),
 	Sequelize = require('sequelize');
 
-const client = new Sequelize('time_puncher', 'timePuncher', 'timePuncher', {
+const DB_CONFIG = require('../config/config').db;
+
+const client = new Sequelize(DB_CONFIG.database, DB_CONFIG.user, DB_CONFIG.password, {
 	dialect : "mysql", // or 'sqlite', 'postgres', 'mariadb'
-	port    : 3306 // or 5432 (for postgres)
+	host    : DB_CONFIG.host,
+	port    : DB_CONFIG.port // or 5432 (for postgres)
 });
 
 var models = importModels();
