@@ -4,7 +4,8 @@
  */
 var supertest = require('co-supertest'),
 	expect = require('chai').expect,
-	_ = require('lodash');
+	_ = require('lodash'),
+	queryString = require('querystring');
 
 var app = require('../../server/server'),
 	db = require('../../server/db');
@@ -15,19 +16,17 @@ var TASK_LIST_MOCK = require('../_mocks/M_TaskList.json');
 
 describe('Tasks', function () {
 	before(syncDatabase);
+	after(syncDatabase);
 
 
 	describe('GET /tasks', function () {
 		beforeEach(insertTaskMocksToDB);
 		it('route should exist', function* () {
-			yield request.get('/tasks').expect(200).end();
+			yield sendRequestTo('/tasks');
 		});
 
 		it('should return array', function* () {
-			var response = yield request
-				.get('/tasks')
-				.expect(200)
-				.end();
+			var response = yield sendRequestTo('/tasks');
 			expect(response).to.have.property('body');
 			expect(response.body).to.be.an('array');
 		});
@@ -35,10 +34,8 @@ describe('Tasks', function () {
 
 		it('should return all Tasks', function* () {
 			var allTasks = yield getDataValuesOfAllTasks;
-			var response = yield request
-				.get('/tasks')
-				.expect(200)
-				.end();
+			var response = yield sendRequestTo('/tasks');
+
 			expect(response).to.have.property('body');
 			expect(response.body.length).to.equal(allTasks.length);
 			expect(response.body).to.deep.equal(allTasks);
@@ -46,12 +43,24 @@ describe('Tasks', function () {
 
 		it('should return empty array if no tasks exist', function* () {
 			yield db.models.Task.destroy();
-			var response = yield request
-				.get('/tasks')
-				.expect(200)
-				.end();
+			var response = yield sendRequestTo('/tasks');
+
 			expect(response.body.length).to.equal(0);
 		});
+
+		it('should limit result to 2 with limitTo query', function* () {
+			var allTasks = yield getDataValuesOfAllTasks;
+			var query = {limitTo : 1};
+
+			var response = yield sendRequestTo('/tasks?' + queryString.stringify(query));
+
+			expect(response.body.length).to.equal(1);
+		});
+
+		it('should offset result by 1 with query', function* () {
+
+		});
+
 	});
 
 	xdescribe('GET /tasks?QUERY', function () {
