@@ -1,10 +1,19 @@
 {
-	"id": 1,
-	"name": "Example Task",
-	"startedAt": 1414921139,
-	"stoppedAt": 1414924739,
-	"tags": [
-		"TestProject",
-		"Booked"
+	"name" : "Example Task",
+	"startedAt" : 1414921139,
+	"stoppedAt" : 1414924739,
+	"tags" : [
+		{
+			"id" : 1,
+			"name" : "TestProject2"
+		},
+		{
+			"id" : 2,
+			"name" : "Booked"
+		},
+		{
+			"id" : 3,
+			"name" : "Timeline"
+		}
 	]
 }
