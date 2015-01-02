@@ -9,6 +9,7 @@ const models = require('../db').models,
 
 var TaskController = {
 	find     : function* () {
+
 		this.body = yield Task.findAll(); // 500 Internal Server Error
 	},
 	findById : function* () {
