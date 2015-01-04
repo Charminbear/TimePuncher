@@ -29,6 +29,11 @@ describe('QueryStringTranslator', function () {
 
 	it('should convert offest-Query', function () {
 		var queryString = {offset: 1};
+		var expectClause = {offset: 1};
+
+		var returnedClause = queryStringConverter.convert(queryString);
+
+		expect(returnedClause).to.deep.equal(expectClause);
 	});
 
 	it('should return undefined if no query parameter given', function () {
