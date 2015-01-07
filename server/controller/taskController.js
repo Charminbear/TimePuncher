@@ -7,9 +7,12 @@ const models = require('../db').models,
 	_ = require('lodash'),
 	Task = models.Task;
 
+/**
+ * @name TaskController
+ * @type {{find: Function, findById: Function, create: Function, update: Function, del: Function}}
+ */
 var TaskController = {
 	find     : function* () {
-
 		this.body = yield Task.findAll(); // 500 Internal Server Error
 	},
 	findById : function* () {
@@ -20,8 +23,9 @@ var TaskController = {
 			}
 		};
 		var task = yield Task.find(whereClause);
+
 		if(!task){
-			this.throw(404);
+			return this.throw(404, 'No Task with that ID exists!');
 		}
 
 		this.body = task;

@@ -18,8 +18,9 @@ APP_ROUTER.route('/tasks')
 	.post()
 	.put();
 APP_ROUTER.route('/tasks/:taskId')
-	.get(taskController.findById);
-
+	.get(taskController.findById)
+	.put()
+	.delete();
 
 module.exports = APP_ROUTER;
 

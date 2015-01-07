@@ -49,9 +49,7 @@ describe('Tasks', function () {
 		});
 
 		it('should limit result to 2 with limitTo query', function* () {
-			var allTasks = yield getDataValuesOfAllTasks;
-			var query = {limitTo : 1};
-
+			var query = {limit : 1};
 			var response = yield sendRequestTo('/tasks?' + queryString.stringify(query));
 
 			expect(response.body.length).to.equal(1);
