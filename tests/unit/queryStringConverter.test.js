@@ -13,35 +13,24 @@ describe('QueryStringConverter', function () {
 		expect(queryStringConverter).to.exist();
 	});
 
-	it('should have #convertAll function', function () {
-		expect(queryStringConverter.convertAll).to.exist();
-		expect(queryStringConverter.convertAll).to.be.a('function');
+	it('should have #convertQuery function', function () {
+		expect(queryStringConverter.convertQuery).to.exist();
+		expect(queryStringConverter.convertQuery).to.be.a('function');
 	});
 
-	it('should convertAll limitTo-Query', function () {
-		var queryString = {limit: 1};
+	it('should convert "limitTo=1" => limit:1', function () {
+		var queryString = 'limitTo=1';
 		var expectClause = {limit: 1};
 
-		var returnedClause = queryStringConverter.convertAll(queryString);
-
+		var returnedClause = queryStringConverter.convertQuery(queryString);
 		expect(returnedClause).to.deep.equal(expectClause);
 	});
 
-	xit('should convertAll offest-Query', function () {
-		var queryString = {offset: 1};
-		var expectClause = {offset: 1};
+	it('should convert "offset=10" => {offset:10}', function () {
+		var queryString = 'offset=10';
+		var expectClause = {offset: 10};
 
-		var returnedClause = queryStringConverter.convertAll(queryString);
-
-		expect(returnedClause).to.deep.equal(expectClause);
+		expect(queryStringConverter.convertQuery(queryString)).to.deep.equal(expectClause);
 	});
 
-	it('should return undefined if no query parameter given', function () {
-		var returnValue = queryStringConverter.convertAll();
-		expect(returnValue).to.not.exist();
-	});
-
-	it('should throw Error on Invalid Filter', function () {
-
-	});
 });
