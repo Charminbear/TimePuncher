@@ -4,6 +4,7 @@
  */
 
 const _ = require('lodash'),
+	util = require('util'),
 	queryString = require('querystring');
 // LIMIT
 // ORDER
@@ -19,13 +20,13 @@ const _ = require('lodash'),
 // allow keywords? include : 'include' // --> model1(fieldName1,fieldName2),model2
 var queryMap = {
 	limitTo : {
-		key: 'limit',
+		key   : 'limit',
 		value : function (value) {
 			return parseInt(value);
 		}
 	},
-	offset: {
-		key : 'offset',
+	offset  : {
+		key   : 'offset',
 		value : function (value) {
 			return parseInt(value);
 		}
@@ -36,17 +37,32 @@ var QueryStringConverter = function () {
 	this.convertQuery = function (query) {
 		var parsedQuery = queryString.parse(query);
 		var result = {};
-		var queryType = queryMap[Object.keys(parsedQuery)[0]];
-
-
-		if(parsedQuery.limitTo){
-			result.limit = parseInt(parsedQuery.limitTo);
-		} else if(parsedQuery.offset){
-			result.offset = parseInt(parsedQuery.offset);
+		try {
+			_.each(parsedQuery, function (value, key) {
+				var queryMapObject = queryMap[key];
+				result[queryMapObject.key] = queryMapObject.value(value);
+			});
+		} catch (error) {
+			if (error instanceof TypeError) {
+				throw new InvalidQueryParameter();
+			}
 		}
 
 		return result;
 	};
 };
 
-module.exports = new QueryStringConverter();
+var InvalidQueryParameter = function (message) {
+	Error.call(this);
+	this.message = message;
+};
+
+util.inherits(InvalidQueryParameter, Error);
+
+var API = {
+	createInstance        : function () {
+		return new QueryStringConverter();
+	},
+	InvalidQueryParameter : InvalidQueryParameter
+};
+module.exports = API;
