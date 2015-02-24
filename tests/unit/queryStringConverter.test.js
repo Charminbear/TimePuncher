@@ -61,6 +61,19 @@ describe('QueryStringConverter', function () {
 			var errorInstance = new InvalidQueryParameter(myErrorMessage);
 			expect(errorInstance.message).to.equal(myErrorMessage);
 		});
+
+		it('should have name property', function () {
+			expect(new InvalidQueryParameter()).to.have.property('name');
+			expect(new InvalidQueryParameter().name).to.equal('InvalidQueryParameter');
+		});
+
+		it('should have statusCode property', function () {
+			expect(new InvalidQueryParameter()).to.have.property('statusCode');
+		});
+
+		it('should have 400 as statusCode property', function () {
+			expect(new InvalidQueryParameter().statusCode).to.equal(400);
+		});
 	});
 
 	it('should throw "InvalidQueryParameterError" on invalid query Parameter', function () {

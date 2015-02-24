@@ -2,5 +2,15 @@
 /**
  * Created by dave on 02.01.15.
  */
+const _ = require('lodash');
 
-module.exports = require('./queryStringConverter');
+var QueryStringConverter = require('./queryStringConverter'),
+	AllErrors = require('./errors');
+
+var API = {
+	createInstance        : function () {
+		return new QueryStringConverter();
+	}
+};
+
+module.exports = _.extend(API, AllErrors);

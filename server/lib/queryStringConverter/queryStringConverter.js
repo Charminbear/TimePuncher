@@ -5,7 +5,8 @@
 
 const _ = require('lodash'),
 	util = require('util'),
-	queryString = require('querystring');
+	queryString = require('querystring'),
+	qsErrors = require('./errors');
 // LIMIT
 // ORDER
 // OFFSET
@@ -18,16 +19,16 @@ const _ = require('lodash'),
 //	fields  : 'attributes', // --> Comma separated like fields=name,id,createdAt
 //	where   : 'where', // --> Comma separated field:values pairs like field1:value1,field2:value2 (flat) - maybe
 // allow keywords? include : 'include' // --> model1(fieldName1,fieldName2),model2
-var queryMap = {
+var sequelizeAdapter = {
 	limitTo : {
 		key   : 'limit',
-		value : function (value) {
+		getValue : function (value) {
 			return parseInt(value);
 		}
 	},
 	offset  : {
 		key   : 'offset',
-		value : function (value) {
+		getValue : function (value) {
 			return parseInt(value);
 		}
 	}
@@ -39,12 +40,12 @@ var QueryStringConverter = function () {
 		var result = {};
 		try {
 			_.each(parsedQuery, function (value, key) {
-				var queryMapObject = queryMap[key];
-				result[queryMapObject.key] = queryMapObject.value(value);
+				let adapterElement = sequelizeAdapter[key];
+				result[adapterElement.key] = adapterElement.getValue(value);
 			});
 		} catch (error) {
 			if (error instanceof TypeError) {
-				throw new InvalidQueryParameter();
+				throw new qsErrors.InvalidQueryParameter();
 			}
 		}
 
@@ -52,17 +53,4 @@ var QueryStringConverter = function () {
 	};
 };
 
-var InvalidQueryParameter = function (message) {
-	Error.call(this);
-	this.message = message;
-};
-
-util.inherits(InvalidQueryParameter, Error);
-
-var API = {
-	createInstance        : function () {
-		return new QueryStringConverter();
-	},
-	InvalidQueryParameter : InvalidQueryParameter
-};
-module.exports = API;
+module.exports = QueryStringConverter;
