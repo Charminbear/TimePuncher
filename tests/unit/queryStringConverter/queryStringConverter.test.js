@@ -17,6 +17,8 @@ describe('QueryStringConverter', function () {
 
 	describe('#convertQuery()', function () {
 		var convertQuery;
+
+
 		beforeEach(function () {
 			convertQuery = qsConverterInstance.convertQuery;
 		});
@@ -46,6 +48,7 @@ describe('QueryStringConverter', function () {
 
 			expect(convertQuery(queryString)).to.deep.equal(expectClause);
 		});
+
 
 		it('should throw InvalidArgument Exception if offest is not a number', function () {
 			var queryString = 'offset=abc';
