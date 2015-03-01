@@ -11,7 +11,7 @@ const qsErrors = require('../../../server/lib/queryStringConverter/errors');
 
 describe('InvalidQueryParameter-Error', function () {
 	var InvalidQueryParameter = qsErrors.InvalidQueryParameter;
-	it('should have InvalidQueryParameterError', function () {
+	it('should exist', function () {
 		expect(InvalidQueryParameter).to.exist();
 	});
 

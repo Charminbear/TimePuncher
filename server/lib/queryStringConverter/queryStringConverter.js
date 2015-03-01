@@ -14,16 +14,16 @@ const _ = require('lodash'),
 // GROUP
 // FIELDS
 // FILTER
-
+const numberRegex = /^[0-9]*$/;
 var sequelizeAdapter = {
 	limitTo : {
-		key   : 'limit',
+		key      : 'limit',
 		getValue : function (value) {
 			return parseInt(value);
 		}
 	},
 	offset  : {
-		key   : 'offset',
+		key      : 'offset',
 		getValue : function (value) {
 			return parseInt(value);
 		}
@@ -34,16 +34,17 @@ var QueryStringConverter = function () {
 	this.convertQuery = function (query) {
 		var parsedQuery = queryString.parse(query);
 		var result = {};
-		try {
-			_.each(parsedQuery, function (value, key) {
-				let adapterElement = sequelizeAdapter[key];
-				result[adapterElement.key] = adapterElement.getValue(value);
-			});
-		} catch (error) {
-			if (error instanceof TypeError) {
+
+		_.each(parsedQuery, function (value, key) {
+			let adapterElement = sequelizeAdapter[key];
+			if (!adapterElement) {
 				throw new qsErrors.InvalidQueryParameter();
 			}
-		}
+			if (!value.match(numberRegex)) {
+				throw new qsErrors.InvalidArgument('Invalid value "' + value + '" for key "' + key + '"');
+			}
+			result[adapterElement.key] = adapterElement.getValue(value);
+		});
 
 		return result;
 	};
