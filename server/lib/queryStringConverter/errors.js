@@ -10,6 +10,14 @@ var InvalidQueryParameter = function (message) {
 	this.message = message;
 	this.statusCode = 400;
 };
-
 util.inherits(InvalidQueryParameter, Error);
+
+var InvalidArgument = function (message) {
+	Error.call(this);
+	this.name = 'InvalidArgument';
+	this.message = message;
+};
+util.inherits(InvalidArgument, Error);
+
 exports.InvalidQueryParameter = InvalidQueryParameter;
+exports.InvalidArgument = InvalidArgument;

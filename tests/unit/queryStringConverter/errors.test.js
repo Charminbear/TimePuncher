@@ -42,3 +42,30 @@ describe('InvalidQueryParameter-Error', function () {
 		expect(new InvalidQueryParameter().statusCode).to.equal(400);
 	});
 });
+
+describe('InvalidArgument-Error', function () {
+	var errorInstance;
+	before(function () {
+		errorInstance = new qsErrors.InvalidArgument();
+	});
+	it('should exist', function () {
+		var InvalidArgument = qsErrors.InvalidArgument;
+		expect(InvalidArgument).to.exist();
+	});
+
+	it('should be type error', function () {
+		expect(util.isError(new qsErrors.InvalidArgument)).to.be.true();
+	});
+
+	it('should have message property', function () {
+		var myErrorMessage = 'Test-Error-Message';
+		var errorInstance = new qsErrors.InvalidArgument(myErrorMessage);
+		expect(errorInstance.message).to.equal(myErrorMessage);
+	});
+	
+	it('should have name property', function () {
+		expect(errorInstance).to.have.property('name');
+		expect(errorInstance.name).to.equal('InvalidArgument');
+	});
+
+});

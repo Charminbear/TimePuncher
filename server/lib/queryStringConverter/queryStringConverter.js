@@ -7,18 +7,14 @@ const _ = require('lodash'),
 	util = require('util'),
 	queryString = require('querystring'),
 	qsErrors = require('./errors');
+
 // LIMIT
 // ORDER
 // OFFSET
 // GROUP
 // FIELDS
 // FILTER
-//	limit   : /[0-9]*/,
-//	offset  : /[0-9]*/, // num
-//	order   : 'order', // --> -/+field
-//	fields  : 'attributes', // --> Comma separated like fields=name,id,createdAt
-//	where   : 'where', // --> Comma separated field:values pairs like field1:value1,field2:value2 (flat) - maybe
-// allow keywords? include : 'include' // --> model1(fieldName1,fieldName2),model2
+
 var sequelizeAdapter = {
 	limitTo : {
 		key   : 'limit',

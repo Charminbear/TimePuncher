@@ -19,7 +19,7 @@ describe('QueryStringConverter', function () {
 		expect(qsConverterInstance.convertQuery).to.exist();
 		expect(qsConverterInstance.convertQuery).to.be.a('function');
 	});
-
+//	limit   : /[0-9]*/,
 	it('should convert "limitTo=1" => {limit:1}', function () {
 		var queryString = 'limitTo=1';
 		var expectClause = {limit : 1};
@@ -27,13 +27,14 @@ describe('QueryStringConverter', function () {
 		var returnedClause = qsConverterInstance.convertQuery(queryString);
 		expect(returnedClause).to.deep.equal(expectClause);
 	});
-
+//	offset  : /[0-9]*/, // num
 	it('should convert "offset=10" => {offset:10}', function () {
 		var queryString = 'offset=10';
 		var expectClause = {offset : 10};
 
 		expect(qsConverterInstance.convertQuery(queryString)).to.deep.equal(expectClause);
 	});
+
 
 	it('should convert "offset=10&limitTo=1" => {offset:10, limit:1}', function () {
 		var queryString = 'offset=10&limitTo=1';
@@ -50,5 +51,10 @@ describe('QueryStringConverter', function () {
 		};
 		expect(funcWrapper).to.throw(expectedError);
 	});
+
+//	order   : 'order', // --> -/+field
+//	fields  : 'attributes', // --> Comma separated like fields=name,id,createdAt
+//	where   : 'where', // --> Comma separated field:values pairs like field1:value1,field2:value2 (flat) - maybe
+// allow keywords? include : 'include' // --> model1(fieldName1,fieldName2),model2
 
 });
