@@ -7,7 +7,7 @@
 const expect = require('chai').expect,
 	util = require('util');
 
-const qsConverter = require('../../server/lib/queryStringConverter'),
+const qsConverter = require('../../../server/lib/queryStringConverter/index'),
 	qsConverterInstance = qsConverter.createInstance();
 
 describe('QueryStringConverter', function () {
@@ -40,40 +40,6 @@ describe('QueryStringConverter', function () {
 		var expectClause = {offset : 10, limit : 1};
 
 		expect(qsConverterInstance.convertQuery(queryString)).to.deep.equal(expectClause);
-	});
-
-	describe('InvalidQueryParameter-Error', function () {
-		var InvalidQueryParameter = qsConverter.InvalidQueryParameter;
-		it('should have InvalidQueryParameterError', function () {
-			expect(InvalidQueryParameter).to.exist();
-		});
-
-		it('should be type error', function () {
-			expect(util.isError(new InvalidQueryParameter)).to.be.true();
-		});
-
-		it('should have message property', function () {
-			expect(new InvalidQueryParameter('')).to.have.property('message');
-		});
-
-		it('should set message property correctly', function () {
-			var myErrorMessage = 'Test-Error-Message';
-			var errorInstance = new InvalidQueryParameter(myErrorMessage);
-			expect(errorInstance.message).to.equal(myErrorMessage);
-		});
-
-		it('should have name property', function () {
-			expect(new InvalidQueryParameter()).to.have.property('name');
-			expect(new InvalidQueryParameter().name).to.equal('InvalidQueryParameter');
-		});
-
-		it('should have statusCode property', function () {
-			expect(new InvalidQueryParameter()).to.have.property('statusCode');
-		});
-
-		it('should have 400 as statusCode property', function () {
-			expect(new InvalidQueryParameter().statusCode).to.equal(400);
-		});
 	});
 
 	it('should throw "InvalidQueryParameterError" on invalid query Parameter', function () {
