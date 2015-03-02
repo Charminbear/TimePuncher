@@ -4,7 +4,7 @@
  */
 const _ = require('lodash');
 
-var QueryStringConverter = require('./queryStringConverter'),
+var QueryStringConverter = require('./QueryStringConverter'),
 	AllErrors = require('./errors');
 
 var API = {
