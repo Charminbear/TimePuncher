@@ -10,7 +10,7 @@ const expect = require('chai').expect,
 const qsErrors = require('../../../server/lib/queryStringConverter/errors');
 describe('QSConverter-Errors', function () {
 
-	describe('InvalidQueryParameter-Error', function () {
+	describe('InvalidQueryParameter', function () {
 		var InvalidQueryParameter = qsErrors.InvalidQueryParameter;
 
 		it('should exist', function () {
@@ -45,24 +45,24 @@ describe('QSConverter-Errors', function () {
 		});
 	});
 
-	describe('InvalidArgument-Error', function () {
+	describe('InvalidArgument', function () {
 		var errorInstance;
 
 		before(function () {
-			errorInstance = new qsErrors.InvalidArgument();
+			errorInstance = new qsErrors.InvalidQueryValue();
 		});
 		it('should exist', function () {
-			var InvalidArgument = qsErrors.InvalidArgument;
+			var InvalidArgument = qsErrors.InvalidQueryValue;
 			expect(InvalidArgument).to.exist();
 		});
 
 		it('should be type error', function () {
-			expect(util.isError(new qsErrors.InvalidArgument)).to.be.true();
+			expect(util.isError(new qsErrors.InvalidQueryValue)).to.be.true();
 		});
 
 		it('should have message property', function () {
 			var myErrorMessage = 'Test-Error-Message';
-			var errorInstance = new qsErrors.InvalidArgument(myErrorMessage);
+			var errorInstance = new qsErrors.InvalidQueryValue(myErrorMessage);
 			expect(errorInstance.message).to.equal(myErrorMessage);
 		});
 

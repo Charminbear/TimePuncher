@@ -12,12 +12,12 @@ var InvalidQueryParameter = function (message) {
 };
 util.inherits(InvalidQueryParameter, Error);
 
-var InvalidArgument = function (message) {
+var InvalidQueryValue = function (message) {
 	Error.call(this);
 	this.name = 'InvalidArgument';
 	this.message = message;
 };
-util.inherits(InvalidArgument, Error);
+util.inherits(InvalidQueryValue, Error);
 
 exports.InvalidQueryParameter = InvalidQueryParameter;
-exports.InvalidArgument = InvalidArgument;
+exports.InvalidQueryValue = InvalidQueryValue;

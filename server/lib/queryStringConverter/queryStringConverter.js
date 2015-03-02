@@ -8,41 +8,25 @@ const _ = require('lodash'),
 	queryString = require('querystring'),
 	qsErrors = require('./errors');
 
-// LIMIT
-// ORDER
-// OFFSET
-// GROUP
-// FIELDS
-// FILTER
-const numberRegex = /^[0-9]*$/;
-var sequelizeAdapter = {
-	limitTo : {
-		key      : 'limit',
-		getValue : function (value) {
-			return parseInt(value);
-		}
-	},
-	offset  : {
-		key      : 'offset',
-		getValue : function (value) {
-			return parseInt(value);
-		}
-	}
-};
+var sequelizeAdapter = require('./sequelizeAdapter');
 
 var QueryStringConverter = function () {
+	var adapter = sequelizeAdapter;
+
 	this.convertQuery = function (query) {
 		var parsedQuery = queryString.parse(query);
 		var result = {};
 
 		_.each(parsedQuery, function (value, key) {
-			let adapterElement = sequelizeAdapter[key];
+			let adapterElement = adapter[key];
 			if (!adapterElement) {
-				throw new qsErrors.InvalidQueryParameter();
+				throw new qsErrors.InvalidQueryParameter('Invalid query parameter with key "' + key + '"!');
 			}
-			if (!value.match(numberRegex)) {
-				throw new qsErrors.InvalidArgument('Invalid value "' + value + '" for key "' + key + '"');
+
+			if (!value.match(adapterElement.validInputs)) {
+				throw new qsErrors.InvalidQueryValue('Invalid value "' + value + '" for key "' + key + '"');
 			}
+
 			result[adapterElement.key] = adapterElement.getValue(value);
 		});
 

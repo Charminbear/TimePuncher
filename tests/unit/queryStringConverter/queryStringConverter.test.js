@@ -5,10 +5,10 @@
 
 
 const expect = require('chai').expect,
-	util = require('util');
+	util = require('util'),
+	queryString = require('querystring');
 
-const qsConverter = require('../../../server/lib/queryStringConverter/index'),
-	qsConverterInstance = qsConverter.createInstance();
+const qsConverter = require('../../../server/lib/queryStringConverter/index');
 
 describe('QueryStringConverter', function () {
 	it('should exist', function () {
@@ -16,10 +16,11 @@ describe('QueryStringConverter', function () {
 	});
 
 	describe('#convertQuery()', function () {
-		var convertQuery;
-
+		var convertQuery,
+			qsConverterInstance;
 
 		beforeEach(function () {
+			qsConverterInstance = qsConverter.createInstance();
 			convertQuery = qsConverterInstance.convertQuery;
 		});
 
@@ -29,36 +30,35 @@ describe('QueryStringConverter', function () {
 		});
 //	limit   : /[0-9]*/,
 		it('should convert "limitTo=1" => {limit:1}', function () {
-			var queryString = 'limitTo=1';
+			var query = 'limitTo=1';
 			var expectClause = {limit : 1};
 
-			var returnedClause = convertQuery(queryString);
+			var returnedClause = convertQuery(query);
 			expect(returnedClause).to.deep.equal(expectClause);
 		});
 
-		it('should throw InvalidArgument Exception if limitTo is not a number', function () {
-			var queryString = 'limitTo=abc';
-			expect(convertQuery.bind(qsConverterInstance, queryString)).to.throw(qsConverter.InvalidArgument);
+		it('should throw InvalidQueryValue Exception if limitTo is not a number', function () {
+			var query = 'limitTo=abc';
+			expect(convertQuery.bind(qsConverterInstance, query)).to.throw(qsConverter.InvalidQueryValue);
 		});
 
 		//	offset  : /[0-9]*/, // num
 		it('should convert "offset=10" => {offset:10}', function () {
-			var queryString = 'offset=10';
+			var query = 'offset=10';
 			var expectClause = {offset : 10};
 
-			expect(convertQuery(queryString)).to.deep.equal(expectClause);
+			expect(convertQuery(query)).to.deep.equal(expectClause);
 		});
 
-
-		it('should throw InvalidArgument Exception if offest is not a number', function () {
+		it('should throw InvalidQueryValue Exception if offest is not a number', function () {
 			var queryString = 'offset=abc';
-			expect(convertQuery.bind(qsConverterInstance, queryString)).to.throw(qsConverter.InvalidArgument);
+			expect(convertQuery.bind(qsConverterInstance, queryString)).to.throw(qsConverter.InvalidQueryValue);
 		});
 
 		it('should convert "offset=10&limitTo=1" => {offset:10, limit:1}', function () {
-			var queryString = 'offset=10&limitTo=1';
+			var query = 'offset=10&limitTo=1';
 			var expectClause = {offset : 10, limit : 1};
-			expect(convertQuery(queryString)).to.deep.equal(expectClause);
+			expect(convertQuery(query)).to.deep.equal(expectClause);
 		});
 
 		it('should throw "InvalidQueryParameterError" on invalid query Parameter', function () {
@@ -67,7 +67,32 @@ describe('QueryStringConverter', function () {
 			expect(convertQuery.bind(qsConverterInstance, invalidQuery)).to.throw(expectedError);
 		});
 
-//	order   : 'order', // --> -/+field
+		//	order   : 'order', // --> -/+field
+		it('should convert orderBy=+field1 => [["field1", "asc"]]', function () {
+			let query = 'orderBy=' + queryString.escape('+field1');
+			expect(convertQuery(query)).to.deep.equal({order : [['field1', 'ASC']]});
+		});
+
+		it('should convert orderBy without + to ascending field', function () {
+			let query ='orderBy=field1';
+			expect(convertQuery(query)).to.deep.equal({order: [['field1', 'ASC']]});
+		});
+
+		it('should convert orderBy=-field1 => [["field1", "desc"]]"', function () {
+			let query = 'orderBy=' + queryString.escape('-field1');
+			expect(convertQuery(query)).to.deep.equal({order : [['field1', 'DESC']]});
+		});
+
+		it('should convert multiple orderBy-Fields', function () {
+			let orderField1 = queryString.escape('-field1');
+			let orderField2 = queryString.escape('+field2');
+			let query = 'orderBy=' + orderField1 + ',' + orderField2;
+			expect(convertQuery(query)).to.deep.equal({order: [['field1', 'DESC'], ['field2', 'ASC']]});
+		});
+
+		it('should throw InvalidQueryValue on wrong type', function () {
+
+		})
 //	fields  : 'attributes', // --> Comma separated like fields=name,id,createdAt
 //	where   : 'where', // --> Comma separated field:values pairs like field1:value1,field2:value2 (flat) - maybe
 // allow keywords? include : 'include' // --> model1(fieldName1,fieldName2),model2
