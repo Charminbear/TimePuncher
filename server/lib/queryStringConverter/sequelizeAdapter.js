@@ -6,7 +6,6 @@
 const _ = require('lodash');
 
 const numberRegex = /^[0-9]*$/,
-	sortOrderRegex = /^[\+|\-[a-zA-Z0-9]*]*$/,
 	SORT_ASCENDING = 'ASC',
 	SORT_DESCENDING = 'DESC';
 

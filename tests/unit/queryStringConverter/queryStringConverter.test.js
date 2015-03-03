@@ -5,10 +5,9 @@
 
 
 const expect = require('chai').expect,
-	util = require('util'),
 	queryString = require('querystring');
 
-const qsConverter = require('../../../server/lib/queryStringConverter/index');
+const qsConverter = require('../../../server/lib/queryStringConverter');
 
 describe('QueryStringConverter', function () {
 	it('should exist', function () {
@@ -28,7 +27,7 @@ describe('QueryStringConverter', function () {
 			expect(convertQuery).to.exist();
 			expect(convertQuery).to.be.a('function');
 		});
-//	limit   : /[0-9]*/,
+		//	limit   : /[0-9]*/,
 		it('should convert "limitTo=1" => {limit:1}', function () {
 			var query = 'limitTo=1';
 			var expectClause = {limit : 1};
@@ -88,14 +87,11 @@ describe('QueryStringConverter', function () {
 			let orderField2 = queryString.escape('+field2');
 			let query = 'orderBy=' + orderField1 + ',' + orderField2;
 			expect(convertQuery(query)).to.deep.equal({order: [['field1', 'DESC'], ['field2', 'ASC']]});
+	});
 		});
 
-		it('should throw InvalidQueryValue on wrong type', function () {
-
-		})
 //	fields  : 'attributes', // --> Comma separated like fields=name,id,createdAt
 //	where   : 'where', // --> Comma separated field:values pairs like field1:value1,field2:value2 (flat) - maybe
 // allow keywords? include : 'include' // --> model1(fieldName1,fieldName2),model2
-	});
 
 });
