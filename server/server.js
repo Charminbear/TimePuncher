@@ -3,8 +3,8 @@
  * Created by David on 26.12.14.
  */
 
-const PORT = process.env.PORT || 3000,
-	ENV = process.env.NODE_ENV || 'development',
+const PORT = process.env.PORT,
+	ENV = process.env.NODE_ENV,
 	CONFIG = require('./config/config');
 
 const koa = require('koa'),

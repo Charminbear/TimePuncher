@@ -4,17 +4,16 @@
  */
 
 
-const env = process.env.NODE_ENV;
-
 const path = require('path'),
 	_ = require('lodash');
 
 var config = {
-	env     : env,
+	env     : process.env.NODE_ENV || 'development',
+	port    : process.env.PORT || 3000,
 	baseDir : path.join(__dirname, '..')
 };
 
-var envConfigPath = path.join(__dirname, 'env', env + '.config.js');
+var envConfigPath = path.join(__dirname, 'env', config.env + '.config.js');
 module.exports = _.extend({},
 	config,
 	require(envConfigPath));
